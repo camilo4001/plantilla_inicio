@@ -61,7 +61,7 @@ void simple_ota_example_task(void *pvParameter)
     ESP_LOGI(TAG, "Starting OTA example");
 
     esp_http_client_config_t config = {
-        .url = "https://ota-servicio-2oxpyyahxa-ue.a.run.app/ssd1306",
+        .url = "innovacionesco.com:3389",
         .cert_pem = (char *)server_cert_pem_start,
         .event_handler = _http_event_handler,
     };
