@@ -61,7 +61,7 @@ void simple_ota_example_task(void *pvParameter)
     ESP_LOGI(TAG, "Starting OTA example");
 
     esp_http_client_config_t config = {
-        .url = "innovacionesco.com:3389",
+        .url = "https://innovacionesco.com:3389/firmware",
         .cert_pem = (char *)server_cert_pem_start,
         .event_handler = _http_event_handler,
     };
