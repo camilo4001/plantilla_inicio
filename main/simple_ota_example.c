@@ -61,8 +61,7 @@ void simple_ota_example_task(void *pvParameter)
     ESP_LOGI(TAG, "Starting OTA example");
 
     esp_http_client_config_t config = {
-        //.url = "https://innovacionesco.com:3389/ssd1306",
-		.url = "https://ota-service-2oxpyyahxa-ue.a.run.app/ssd1306",
+        .url = "https://innovacionesco.com:3389/ssd1306",
         .cert_pem = (char *)server_cert_pem_start,
         .event_handler = _http_event_handler,
     };
@@ -87,7 +86,7 @@ void simple_ota_example_task(void *pvParameter)
 #endif*/
 
 //#ifdef CONFIG_EXAMPLE_SKIP_COMMON_NAME_CHECK
-    config.skip_cert_common_name_check = true;
+    //config.skip_cert_common_name_check = true;
 //#endif
 
 	//ESP_LOGI(TAG, "Confiuracion obtenida :-----");
