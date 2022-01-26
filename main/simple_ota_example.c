@@ -67,7 +67,7 @@ void simple_ota_example_task(void *pvParameter)
     };
 	
 	ESP_LOGI(TAG, "Url obtenida :-----");
-	printf(config.url);	
+		
 /*
 #ifdef CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL_FROM_STDIN
     char url_buf[OTA_URL_SIZE];
@@ -86,13 +86,15 @@ void simple_ota_example_task(void *pvParameter)
 #endif*/
 
 //#ifdef CONFIG_EXAMPLE_SKIP_COMMON_NAME_CHECK
-    config.skip_cert_common_name_check = true;
+    //config.skip_cert_common_name_check = true;
 //#endif
 
 	//ESP_LOGI(TAG, "Confiuracion obtenida :-----");
 	//printf(config);
 
     esp_err_t ret = esp_https_ota(&config);
+	printf(config.url);
+	
     if (ret == ESP_OK) {
         esp_restart();
     } else {
