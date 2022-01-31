@@ -42,6 +42,7 @@
 //DEFINICION DE FUNCIONES
 void http_server_ini();
 void init_wifi();
+void ble_inicio();
 
 //*****
 void tft_init();
