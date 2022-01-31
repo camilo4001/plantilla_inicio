@@ -104,6 +104,21 @@ void simple_ota_example_task(void *pvParameter)
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
+void ini_puertos(){
+
+	//PINES MANEJO LCD TFT-----------------------------------------------------------------------------
+	gpio_pad_select_gpio(RST_PIN); //2
+	gpio_pad_select_gpio(DC_PIN);  //15
+	//gpio_pad_select_gpio(SSLCD);   //0
+
+	gpio_set_direction(RST_PIN, GPIO_MODE_OUTPUT); //2
+	gpio_set_direction(DC_PIN, GPIO_MODE_OUTPUT); //15
+    gpio_set_level(DC_PIN, 1);
+    gpio_set_level(RST_PIN, 1);
+	//------------------------------------------------------------------------------------------------
+	
+}
+
 
 void app_main()
 {
@@ -126,7 +141,23 @@ void app_main()
      * Read "Establishing Wi-Fi or Ethernet Connection" section in
      * examples/protocols/README.md for more information about this function.
      */
-    ESP_ERROR_CHECK(example_connect());
-
+    //ESP_ERROR_CHECK(example_connect());
+	
+	//Codigo Nuevo**********
+	
+	
+	ini_puertos();
+	
+	//Inicializa modulos
+	init_wifi();
+	http_server_ini();
+	ble_inicio();
+	tft_init();
+	
+	//Iniciar primer configuraciones
+	fillScreen(TFTBACKCOLOR);
+	ESP_LOGI(INFO_TAG,"SE PINTA EN NEGRO");
+	
+	//**********************
     xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
 }
