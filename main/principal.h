@@ -1,6 +1,6 @@
 //CONSTANTES
 #define INFO_TAG "INFO_PROCESS"
-
+#define SPI_TAG "SPIINFO"
 
 //**********************SPI 3 LCD PRINCIPAL
 #define SPI_BUS  HSPI_HOST
