@@ -38,7 +38,7 @@
 #include "sdkconfig.h"
 
 #include "ble_uart_server.h"
-#include "matriz8x8.h"
+#include "principal.h"
 
 //#include "pines_control.h"
 //#include "audios.h"
@@ -356,28 +356,28 @@ void char1_write_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp
 
 	if (strncmp((const char *)gl_char[0].char_val->attr_value,"ADELANTE",4)==0) {
     	ESP_LOGI(GATTS_TAG, "INGRESO ADELANTE");
-    	accionar_motor(IZQUIERDA);
-		matriz_dibujar_cara(MATRIZ_CARA_FELIZ);
+    	//accionar_motor(IZQUIERDA);
+		//matriz_dibujar_cara(MATRIZ_CARA_FELIZ);
     }
 	if (strncmp((const char *)gl_char[0].char_val->attr_value,"ATRAS",4)==0) {
         ESP_LOGI(GATTS_TAG, "INGRESO ATRAS");
-		accionar_motor(DERECHA);
-		matriz_dibujar_cara(MATRIZ_CARA_TRISTE);
+		//accionar_motor(DERECHA);
+		//matriz_dibujar_cara(MATRIZ_CARA_TRISTE);
     }
     if(strncmp((const char *)gl_char[0].char_val->attr_value,"DERECHA",4)==0) {
     	ESP_LOGI(GATTS_TAG, "INGRESO DERECHA");
-    	accionar_motor(ATRAS);
-		matriz_dibujar_cara(MATRIZ_CARA_ENOJADO);
+    	//accionar_motor(ATRAS);
+		//matriz_dibujar_cara(MATRIZ_CARA_ENOJADO);
 		
     }
     if (strncmp((const char *)gl_char[0].char_val->attr_value,"IZQUIERDA",4)==0) {
     	ESP_LOGI(GATTS_TAG, "INGRESO IZQUIERDA");
-    	accionar_motor(ADELANTE);
-		matriz_dibujar_cara(MATRIZ_CARA_ENOJADO);
+    	//accionar_motor(ADELANTE);
+		//matriz_dibujar_cara(MATRIZ_CARA_ENOJADO);
     }
 	    if (strncmp((const char *)gl_char[0].char_val->attr_value,"PARAR",4)==0) {
     	ESP_LOGI(GATTS_TAG, "INGRESO PARAR");
-    	parar_motor_motor();
+    	//parar_motor_motor();
     }
 	
 	esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
