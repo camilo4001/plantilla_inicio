@@ -52,36 +52,6 @@ http_server_netconn_serve(struct netconn *conn)
   u16_t buflen;
   err_t err;
   char *html_message = NULL;
-  int habvsal1 = 0;
-  int habvsal2 = 0;
-  int habvsal3 = 0;
-  int habvsal4 = 0;
-  int actvsal1 = 0;
-  int actvsal2 = 0;
-  int actvsal3 = 0;
-  int actvsal4 = 0;
-  int umb_suelo = 0;
-  int dis_suelo = 0;
-  int mod_suelo = 0;
-  int dur_sal1 = 0;
-  int int_sal1 = 0;
-  char enc_tiempo[10] = "Activado";
-  char enc_sensor[10] = "Activado";
-  char modo_sensor[15] = "Cont Humedad";
-  char hora_inicio[15] = "Establecida";
-  char comando_actual[15] = "NA       ";
-  char comando_estado[10] = "NA     ";
-  int sal_hab1 = 1;
-  int sal_hab2 = 1;
-  int sal_hab3 = 1;
-  int sal_hab4 = 1;
-  int sal_activa1 = 1;
-  int sal_activa2 = 1;
-  int sal_activa3 = 1;
-  int sal_activa4 = 1;
-  int var_n_disparos_suelo = numero_disparos_suelo;
-  int horaini = 0;
-  int minuini = 0;
 
   /* Read the data from the port, blocking if nothing yet there.
    We assume the request (the part we care about) is in one netbuf */
@@ -198,12 +168,14 @@ http_server_netconn_serve(struct netconn *conn)
 	   }
 	   else{
 		   
-		  asprintf(&html_message, FORMATO_HTML,dht11_datos.temperature,dht11_datos.temperature_decimal,dht11_datos.humidity,sensor_suelo,suelo_medida_base,umbral_disparos_suelo,modo_sensor,horaaini,minutoini,hora_inicio,duracion_encedido_salida1,intervalo_encendido_sal1,enc_tiempo,enc_sensor,tiempo_falt_act_sal1,var_n_disparos_suelo,comando_actual,comando_env[1],comando_estado,fecha_reg1,hist1temp,hist1tempdec,hist1humed,hist1suelo,fecha_reg2,hist2temp,hist2tempdec,hist2humed,hist2suelo,fecha_reg3,hist3temp,hist3tempdec,hist3humed,hist3suelo,rep_str_sal1a,rep_str_sal1b,rep_str_sal1c,rep_str_sal2a,rep_str_sal2b,rep_str_sal2c,rep_str_sal3a,rep_str_sal3b,rep_str_sal3c,rep_str_sal4a,rep_str_sal4b,rep_str_sal4c,sal_activa1,sal_activa2,sal_activa3,sal_activa4,sal_hab1,sal_hab2,sal_hab3,sal_hab4);
+		  //asprintf(&html_message, FORMATO_HTML,dht11_datos.temperature,dht11_datos.temperature_decimal,dht11_datos.humidity,sensor_suelo,suelo_medida_base,umbral_disparos_suelo,modo_sensor,horaaini,minutoini,hora_inicio,duracion_encedido_salida1,intervalo_encendido_sal1,enc_tiempo,enc_sensor,tiempo_falt_act_sal1,var_n_disparos_suelo,comando_actual,comando_env[1],comando_estado,fecha_reg1,hist1temp,hist1tempdec,hist1humed,hist1suelo,fecha_reg2,hist2temp,hist2tempdec,hist2humed,hist2suelo,fecha_reg3,hist3temp,hist3tempdec,hist3humed,hist3suelo,rep_str_sal1a,rep_str_sal1b,rep_str_sal1c,rep_str_sal2a,rep_str_sal2b,rep_str_sal2c,rep_str_sal3a,rep_str_sal3b,rep_str_sal3c,rep_str_sal4a,rep_str_sal4b,rep_str_sal4c,sal_activa1,sal_activa2,sal_activa3,sal_activa4,sal_hab1,sal_hab2,sal_hab3,sal_hab4);
 
 		  //ESP_LOGI("HTMLINFO", "\n ****** HTML A MOSTRAR \"%s\" ***tamaño %d************\n", html_message,strlen(html_message)-1);
 
+		  //netconn_write(conn, http_html_hdr, sizeof(http_html_hdr)-1, NETCONN_NOCOPY);
+		  //netconn_write(conn, html_message, strlen(html_message)-1, NETCONN_NOCOPY);
 		  netconn_write(conn, http_html_hdr, sizeof(http_html_hdr)-1, NETCONN_NOCOPY);
-		  netconn_write(conn, html_message, strlen(html_message)-1, NETCONN_NOCOPY);
+		  netconn_write(conn, comando_response, sizeof(comando_response)-1, NETCONN_NOCOPY);
 	  }
     }
 
