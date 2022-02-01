@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("D:/PROYECTOS/ESP32_ESTABLE/simple_ota_example/build/bootloader/esp-idf/cmake_install.cmake")
+  include("D:/PROYECTOS/ESP32_ESTABLE/ota_imagen_base/build/bootloader/esp-idf/cmake_install.cmake")
 
 endif()
 
@@ -46,5 +46,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/PROYECTOS/ESP32_ESTABLE/simple_ota_example/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/PROYECTOS/ESP32_ESTABLE/ota_imagen_base/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

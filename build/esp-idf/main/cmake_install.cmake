@@ -1,4 +1,4 @@
-# Install script for directory: D:/PROYECTOS/ESP32_ESTABLE/simple_ota_example/main
+# Install script for directory: D:/PROYECTOS/ESP32_ESTABLE/ota_imagen_base/main
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

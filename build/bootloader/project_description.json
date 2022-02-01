@@ -1,8 +1,8 @@
 {
     "project_name":       "bootloader",
     "project_path":       "D:/PROYECTOS/ESP32_ESTABLE/esp-idf/components/bootloader/subproject",
-    "build_dir":          "D:/PROYECTOS/ESP32_ESTABLE/simple_ota_example/build/bootloader",
-    "config_file":        "D:/PROYECTOS/ESP32_ESTABLE/simple_ota_example/sdkconfig",
+    "build_dir":          "D:/PROYECTOS/ESP32_ESTABLE/ota_imagen_base/build/bootloader",
+    "config_file":        "D:/PROYECTOS/ESP32_ESTABLE/ota_imagen_base/sdkconfig",
     "config_defaults":    "",
     "app_elf":            "bootloader.elf",
     "app_bin":            "bootloader.bin",

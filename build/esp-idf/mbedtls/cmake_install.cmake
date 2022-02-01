@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("D:/PROYECTOS/ESP32_ESTABLE/simple_ota_example/build/esp-idf/mbedtls/mbedtls/cmake_install.cmake")
+  include("D:/PROYECTOS/ESP32_ESTABLE/ota_imagen_base/build/esp-idf/mbedtls/mbedtls/cmake_install.cmake")
 
 endif()
 
