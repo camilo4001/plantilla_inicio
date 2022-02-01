@@ -73,7 +73,7 @@ http_server_netconn_serve(struct netconn *conn)
         buf[4]=='/' ) {
           printf("%c\n", buf[5]);
 
-       if(buf[5]=='?' && ant_comando_env[0] == DEFECTO_COMANDO){
+       if(buf[5]=='?'){
 		   
 		   printf("Entra a encontrar valores \n");
 		   	/*
