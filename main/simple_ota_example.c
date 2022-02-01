@@ -28,6 +28,10 @@ static const char *TAG = "simple_ota_example";
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
 extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
 
+// VAR SPI
+spi_device_handle_t spi;
+
+
 #define OTA_URL_SIZE 256 
 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
@@ -106,6 +110,30 @@ void simple_ota_example_task(void *pvParameter)
         vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 }
+
+void enviar_valor_spi(const uint8_t cmd)
+{
+	spi_transaction_t t;
+	spi_transaction_t v;
+	int resp = 0;
+
+    memset(&t, 0, sizeof(t));       //Zero out the transaction
+    t.length=8;                     //Command is 8 bits
+    t.tx_buffer=&cmd;               //Envia el comando o la direccion
+    //t.rx_buffer = miso;
+
+    //if (spi_device_transmit(spi, &t) != ESP_OK)
+	if (spi_device_polling_transmit(spi, &t) != ESP_OK)
+    {
+    	resp =1;
+    }
+
+
+    //ESP_LOGI(SPI_TAG,"SE COMPLETA ENVIO");
+
+}
+
+
 void ini_puertos(){
 
 	//PINES MANEJO LCD TFT-----------------------------------------------------------------------------
@@ -146,6 +174,34 @@ void app_main()
     //ESP_ERROR_CHECK(example_connect());
 	
 	//Codigo Nuevo**********
+	
+	//Inicia spi	//SPI3
+    spi_bus_config_t spi_bus_cfg = {
+        //.miso_io_num=PIN_NUM_MISO,
+        .mosi_io_num=PIN_NUM_MOSI,
+        .sclk_io_num=PIN_NUM_CLK,
+        .quadwp_io_num=-1,
+        .quadhd_io_num=-1,
+		.max_transfer_sz=16*240*2+8
+
+    };
+
+    spi_device_interface_config_t dev_cfg = {
+            .clock_speed_hz = 8000000,           
+            .mode = 2,                       // SPI mode 0
+			.queue_size = 7,
+	};
+
+    if(spi_bus_initialize(SPI_BUS, &spi_bus_cfg, 1) != ESP_OK)
+    {
+    	ESP_LOGI(SPI_TAG,"ERROR INICIALIZAR BUS SPI");
+    }
+
+    if (spi_bus_add_device(SPI_BUS, &dev_cfg, &spi) != ESP_OK)
+    {
+    	ESP_LOGI(SPI_TAG,"ERROR EN ADICIONAR DISPOSITIVO");
+    }
+	ESP_LOGI(SPI_TAG,"SPI INICIADO");
 	
 	
 	ini_puertos();

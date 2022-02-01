@@ -1,6 +1,13 @@
 //CONSTANTES
 #define INFO_TAG "INFO_PROCESS"
 
+
+//**********************SPI 3 LCD PRINCIPAL
+#define SPI_BUS  HSPI_HOST
+#define PIN_NUM_MISO 25
+#define PIN_NUM_MOSI 23
+#define PIN_NUM_CLK  18 //18
+
 //*********************WIFI
 #define CONFIG_ESP_WIFI_SSID  "Tomas_2G"
 #define CONFIG_ESP_WIFI_PASSWORD  "tomas4982"
