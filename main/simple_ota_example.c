@@ -65,7 +65,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 
 void simple_ota_example_task(void *pvParameter)
 {
-    ESP_LOGI(TAG, "Starting OTA example");
+    ESP_LOGI(INFO_TAG, "Starting OTA example");
 
     esp_http_client_config_t config = {
         .url = "https://innovacionesco.com:3389/ssd1306",
@@ -73,7 +73,7 @@ void simple_ota_example_task(void *pvParameter)
         .event_handler = _http_event_handler,
     };
 	
-	ESP_LOGI(TAG, "Url obtenida :-----");
+	ESP_LOGI(INFO_TAG, "Url obtenida :-----");
 		
 /*
 #ifdef CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL_FROM_STDIN
@@ -105,7 +105,7 @@ void simple_ota_example_task(void *pvParameter)
     if (ret == ESP_OK) {
         esp_restart();
     } else {
-        ESP_LOGE(TAG, "Firmware upgrade failed");
+        ESP_LOGE(INFO_TAG, "Firmware upgrade failed");
     }
     while (1) {
         vTaskDelay(1000 / portTICK_PERIOD_MS);
