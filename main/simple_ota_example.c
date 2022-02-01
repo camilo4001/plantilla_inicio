@@ -32,6 +32,8 @@ extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
 // VAR SPI
 spi_device_handle_t spi;
 
+// Wifi
+char *ip_str = NULL;
 
 #define OTA_URL_SIZE 256 
 
@@ -116,7 +118,7 @@ void enviar_valor_spi(const uint8_t cmd)
 {
 	spi_transaction_t t;
 	spi_transaction_t v;
-	int resp = 0;
+	//int resp = 0;
 
     memset(&t, 0, sizeof(t));       //Zero out the transaction
     t.length=8;                     //Command is 8 bits
@@ -126,7 +128,7 @@ void enviar_valor_spi(const uint8_t cmd)
     //if (spi_device_transmit(spi, &t) != ESP_OK)
 	if (spi_device_polling_transmit(spi, &t) != ESP_OK)
     {
-    	resp =1;
+    	ESP_LOGI(SPI_TAG,"ERROR ENVIANDO MENSAJE");
     }
 
 
