@@ -21,6 +21,7 @@
 #include "nvs.h"
 #include "nvs_flash.h"
 #include "protocol_examples_common.h"
+#include "driver/gpio.h"
 #include "principal.h"
 
 static const char *TAG = "simple_ota_example";
