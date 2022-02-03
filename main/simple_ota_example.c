@@ -76,24 +76,7 @@ void simple_ota_example_task(void *pvParameter)
     };
 	
 	ESP_LOGI(INFO_TAG, "Url obtenida :-----");
-		
-/*
-#ifdef CONFIG_EXAMPLE_FIRMWARE_UPGRADE_URL_FROM_STDIN
-    char url_buf[OTA_URL_SIZE];
-    //if (strcmp(config.url, "FROM_STDIN") == 0) {
 	
-	if (1) {
-        example_configure_stdin_stdout();
-        fgets(url_buf, OTA_URL_SIZE, stdin);
-        int len = strlen(url_buf);
-        url_buf[len - 1] = '\0';
-        config.url = url_buf;
-    } else {
-        ESP_LOGE(TAG, "Configuration mismatch: wrong firmware upgrade image url");
-        abort();
-    }
-#endif*/
-
 //#ifdef CONFIG_EXAMPLE_SKIP_COMMON_NAME_CHECK
     //config.skip_cert_common_name_check = true;
 //#endif
@@ -155,6 +138,7 @@ void ini_puertos(){
 
 void app_main()
 {
+
     // Initialize NVS.
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -170,12 +154,6 @@ void app_main()
     tcpip_adapter_init();
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
-    /* This helper function configures Wi-Fi or Ethernet, as selected in menuconfig.
-     * Read "Establishing Wi-Fi or Ethernet Connection" section in
-     * examples/protocols/README.md for more information about this function.
-     */
-    //ESP_ERROR_CHECK(example_connect());
-	
 	//Codigo Nuevo**********
 	
 	//Inicia spi	//SPI3
@@ -206,12 +184,16 @@ void app_main()
     }
 	ESP_LOGI(SPI_TAG,"SPI INICIADO");
 	
+
 	
 	ini_puertos();
+	gpio_set_level(DC_PIN, 1);
+    gpio_set_level(RST_PIN, 1);
 	
 	//Inicializa modulos
-	init_wifi();
-	http_server_ini();
+	
+	//init_wifi();
+	//http_server_ini();
 	ble_inicio();
 	tft_init();
 	
@@ -220,5 +202,5 @@ void app_main()
 	ESP_LOGI(INFO_TAG,"SE PINTA EN NEGRO");
 	
 	//**********************
-    xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
+    //xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
 }
