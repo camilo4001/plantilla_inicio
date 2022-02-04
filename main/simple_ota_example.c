@@ -39,7 +39,7 @@ char *ip_str = NULL;
 
 
 char *output_buffer;  // Buffer to store response of http request from event handler
-int output_len;       // Stores number of bytes read
+int output_len=0;       // Stores number of bytes read
 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
@@ -58,6 +58,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
         break;
     case HTTP_EVENT_ON_DATA:
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
+		
 		/*
 		if (output_buffer == NULL) {
 			output_buffer = (char *) malloc(esp_http_client_get_content_length(evt->client));
@@ -67,9 +68,10 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 				return ESP_FAIL;
 			}
 		}
-		memcpy(output_buffer + output_len, evt->data, evt->data_len);
 		*/
-		asprintf(&output_buffer, "%s",evt->data);
+		memcpy(output_buffer + output_len, evt->data, evt->data_len);
+		
+		//asprintf(&output_buffer, "%s",evt->data);
 		
 		ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, DATPS=%s", output_buffer);
         break;
