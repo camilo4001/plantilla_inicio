@@ -54,6 +54,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
         break;
     case HTTP_EVENT_ON_DATA:
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
+		printf(evt);
         break;
     case HTTP_EVENT_ON_FINISH:
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_FINISH");
@@ -61,8 +62,39 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
     case HTTP_EVENT_DISCONNECTED:
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_DISCONNECTED");
         break;
+	case HTTP_EVENT_REDIRECT:
+		ESP_LOGI(INFO_TAG, "HTTP_EVENT_REDIRECT");
+        break;
     }
     return ESP_OK;
+}
+
+
+void simple_get_example_task(void *pvParameter)
+{
+    ESP_LOGI(INFO_TAG, "Starting GET example");
+
+    esp_http_client_config_t config = {
+        .url = "https://innovacionesco.com:3389/imagenes",
+        .cert_pem = (char *)server_cert_pem_start,
+        .event_handler = _http_event_handler,
+    };
+	
+	ESP_LOGI(INFO_TAG, "Url obtenida para get:-----");
+	
+	esp_http_client_handle_t client = esp_http_client_init(&config);
+
+    // GET
+    esp_err_t err = esp_http_client_perform(client);
+    if (err == ESP_OK) {
+        ESP_LOGI(TAG, "HTTP GET Status = %d, content_length = %lld",
+                esp_http_client_get_status_code(client),
+                esp_http_client_get_content_length(client));
+    } else {
+        ESP_LOGE(TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
+    }
+    ESP_LOG_BUFFER_HEX(TAG, local_response_buffer, strlen(local_response_buffer));
+	
 }
 
 void simple_ota_example_task(void *pvParameter)
@@ -203,4 +235,5 @@ void app_main()
 	
 	//**********************
     //xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
+    xTaskCreate(&simple_get_example_task, "get_example_task", 8192, NULL, 5, NULL);
 }
