@@ -38,8 +38,8 @@ char *ip_str = NULL;
 #define OTA_URL_SIZE 256 
 
 
-static char *output_buffer;  // Buffer to store response of http request from event handler
-static int output_len;       // Stores number of bytes read
+char *output_buffer;  // Buffer to store response of http request from event handler
+int output_len;       // Stores number of bytes read
 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
@@ -67,6 +67,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 			}
 		}
 		memcpy(output_buffer + output_len, evt->data, evt->data_len);
+		//asprintf(&output_buffer, "%s",evt->data);
 		
 		ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, DATPS=%s", output_buffer);
         break;
