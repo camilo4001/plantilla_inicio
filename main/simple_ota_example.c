@@ -59,16 +59,16 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
     case HTTP_EVENT_ON_DATA:
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
 		
-		/*
+		
 		if (output_buffer == NULL) {
-			output_buffer = (char *) malloc(esp_http_client_get_content_length(evt->client));
+			output_buffer = (char *) malloc(evt->data_len);
 			output_len = 0;
 			if (output_buffer == NULL) {
-				ESP_LOGE(INFO_TAG, "Failed to allocate memory for output buffer");
+				ESP_LOGE(INFO_TAG, "buffer Null Failed to allocate memory for output buffer");
 				return ESP_FAIL;
 			}
 		}
-		*/
+		
 		memcpy(output_buffer + output_len, evt->data, evt->data_len);
 		
 		//asprintf(&output_buffer, "%s",evt->data);
