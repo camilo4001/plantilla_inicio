@@ -37,6 +37,10 @@ char *ip_str = NULL;
 
 #define OTA_URL_SIZE 256 
 
+
+static char *output_buffer;  // Buffer to store response of http request from event handler
+static int output_len;       // Stores number of bytes read
+
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
     switch (evt->event_id) {
@@ -54,8 +58,15 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
         break;
     case HTTP_EVENT_ON_DATA:
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
-		ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, MSG=%c", evt->data);
-		printf(evt);
+		if (output_buffer == NULL) {
+			output_buffer = (char *) malloc(esp_http_client_get_content_length(evt->client));
+			output_len = 0;
+			if (output_buffer == NULL) {
+				ESP_LOGE(TAG, "Failed to allocate memory for output buffer");
+				return ESP_FAIL;
+			}
+		}
+		memcpy(output_buffer + output_len, evt->data, evt->data_len);
         break;
     case HTTP_EVENT_ON_FINISH:
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_FINISH");
