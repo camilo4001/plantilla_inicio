@@ -93,7 +93,7 @@ void simple_get_example_task(void *pvParameter)
     } else {
         ESP_LOGE(INFO_TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
     }
-    ESP_LOG_BUFFER_HEX(INFO_TAG, local_response_buffer, strlen(local_response_buffer));
+    //ESP_LOG_BUFFER_HEX(INFO_TAG, local_response_buffer, strlen(local_response_buffer));
 	
 }
 
