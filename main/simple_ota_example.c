@@ -224,9 +224,9 @@ void app_main()
 	
 	//Inicializa modulos
 	
-	//init_wifi();
+	init_wifi();
 	//http_server_ini();
-	ble_inicio();
+	//ble_inicio();
 	tft_init();
 	
 	//Iniciar primer configuraciones
