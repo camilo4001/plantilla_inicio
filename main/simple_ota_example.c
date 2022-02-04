@@ -62,7 +62,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 			output_buffer = (char *) malloc(esp_http_client_get_content_length(evt->client));
 			output_len = 0;
 			if (output_buffer == NULL) {
-				ESP_LOGE(TAG, "Failed to allocate memory for output buffer");
+				ESP_LOGE(INFO_TAG, "Failed to allocate memory for output buffer");
 				return ESP_FAIL;
 			}
 		}
