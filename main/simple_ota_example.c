@@ -54,6 +54,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
         break;
     case HTTP_EVENT_ON_DATA:
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
+		ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, MSG=%s", evt->data);
 		printf(evt);
         break;
     case HTTP_EVENT_ON_FINISH:
