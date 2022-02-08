@@ -49,7 +49,7 @@ char *ip_str = NULL;
 
 
 char *output_buffer;  // Buffer to store response of http request from event handler
-int output_len=0;       // Stores number of bytes read
+//int output_len=0;       // Stores number of bytes read
 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 {
@@ -69,17 +69,16 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
     case HTTP_EVENT_ON_DATA:
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
 		
-		
 		if (output_buffer == NULL) {
 			output_buffer = (char *) malloc(evt->data_len);
-			output_len = 0;
+			//output_len = evt->data_len;
 			if (output_buffer == NULL) {
 				ESP_LOGE(INFO_TAG, "buffer Null Failed to allocate memory for output buffer");
 				return ESP_FAIL;
 			}
 		}
 		
-		memcpy(output_buffer, evt->data, evt->data_len);
+		memcpy(output_buffer, evt->data, (evt->data_len)+1);
 		
 		//asprintf(&output_buffer, "%s",evt->data);
 		
