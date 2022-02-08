@@ -132,7 +132,8 @@ void simple_get_example_task(void *pvParameter)
 					// Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
 					ESP_LOGI(INFO_TAG,"Token: %s\n", token);
 					token = strtok(NULL, delimitador);
-        }
+				}
+			}
 			
 		} else {
 			ESP_LOGE(INFO_TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
