@@ -29,6 +29,16 @@
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
 extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
 
+/*
+char imagenes_var[20][10] ={{"","","","","","","","","",""},
+ {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},
+ {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},
+ {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},
+ {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},
+ {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""}
+ };
+*/
+
 // VAR SPI
 spi_device_handle_t spi;
 
@@ -74,14 +84,6 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 		//asprintf(&output_buffer, "%s",evt->data);
 		
 		ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, DATOS=%s", output_buffer);
-		char delimitador[] = ",";
-		char *token = strtok(output_buffer, delimitador);
-		if(token != NULL){
-			while(token != NULL){
-				// Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
-				ESP_LOGI(INFO_TAG,"Token: %s\n", token);
-				token = strtok(NULL, delimitador);
-        }
     }
         break;
     case HTTP_EVENT_ON_FINISH:
@@ -100,6 +102,9 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 
 void simple_get_example_task(void *pvParameter)
 {
+	char *token;
+	char delimitador[] = ",";
+	
 	while (1) {
 		ESP_LOGI(INFO_TAG, "Starting GET example");
 
@@ -119,6 +124,17 @@ void simple_get_example_task(void *pvParameter)
 			ESP_LOGI(INFO_TAG, "HTTP GET Status = %d, content_length = %d",
 					esp_http_client_get_status_code(client),
 					esp_http_client_get_content_length(client));
+			
+			
+			token = strtok(output_buffer, delimitador);
+			if(token != NULL){
+				imagenes_var[0][]= token
+				while(token != NULL){
+					// Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
+					ESP_LOGI(INFO_TAG,"Token: %s\n", token);
+					token = strtok(NULL, delimitador);
+        }
+			
 		} else {
 			ESP_LOGE(INFO_TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
 		}
