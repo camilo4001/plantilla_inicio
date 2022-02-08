@@ -78,7 +78,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 			}
 		}
 		
-		memcpy(output_buffer, evt->data, (evt->data_len)+1);
+		memcpy(output_buffer, evt->data, evt->data_len);
 		
 		//asprintf(&output_buffer, "%s",evt->data);
 		
