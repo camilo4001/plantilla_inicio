@@ -38,7 +38,7 @@ extern const unsigned char Amin,Bmin,Cmin,Dmin,Emin,Rmin,Tmin,Imin,Zmin,Omin,Smi
 extern const unsigned char flecha_der,flecha_izq;
 extern const unsigned char	CFeliz,CPreo,CTriste,CEnojado;
 
-int cursor_x=0;
+extern int cursor_x;
 
 
 void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex)
