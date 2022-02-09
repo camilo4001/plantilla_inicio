@@ -67,8 +67,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", evt->header_key, evt->header_value);
         break;
     case HTTP_EVENT_ON_DATA:
-        ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);
-		
+        ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);		
 		if (output_buffer == NULL) {
 			output_buffer = (char *) malloc(evt->data_len);
 			//output_len = evt->data_len;
@@ -134,6 +133,8 @@ void simple_get_example_task(void *pvParameter)
 					token = strtok(NULL, delimitador);
 				}
 			}
+			
+			output_buffer = NULL;
 			
 		} else {
 			ESP_LOGE(INFO_TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
