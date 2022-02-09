@@ -102,6 +102,7 @@ void simple_get_example_task(void *pvParameter)
 {
 	char *token;
 	char delimitador[] = ",";
+	uint8_t linea_lcd = 0;
 	
 	while (1) {
 		ESP_LOGI(INFO_TAG, "Starting GET example");
@@ -127,10 +128,13 @@ void simple_get_example_task(void *pvParameter)
 			
 			token = strtok(output_buffer, delimitador);
 			if(token != NULL){
+				linea_lcd = 2
 				while(token != NULL){
 					// Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
 					ESP_LOGI(INFO_TAG,"Token: %s\n", token);
+					escribir_algo(token,strlen(token),linea_lcd,2);
 					token = strtok(NULL, delimitador);
+					linea_lcd += 1; 
 				}
 			}
 			
@@ -282,7 +286,7 @@ void app_main()
 	//Iniciar primer configuraciones
 	fillScreen(TFTBACKCOLOR);
 	ESP_LOGI(INFO_TAG,"SE PINTA EN NEGRO");
-	escribir_algo("Conectando a servidor",21,1,2);
+	escribir_algo("Conectando...",13,1,2);
 	
 	//**********************
     //xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
