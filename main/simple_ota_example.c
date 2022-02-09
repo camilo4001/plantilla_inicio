@@ -48,7 +48,7 @@ char *ip_str = NULL;
 #define OTA_URL_SIZE 256 
 
 
-char *output_buffer;  // Buffer to store response of http request from event handler
+char *output_buffer = NULL;  // Buffer to store response of http request from event handler
 //int output_len=0;       // Stores number of bytes read
 
 esp_err_t _http_event_handler(esp_http_client_event_t *evt)
@@ -137,6 +137,7 @@ void simple_get_example_task(void *pvParameter)
 			
 		} else {
 			ESP_LOGE(INFO_TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
+			output_buffer = NULL;
 		}
 		//ESP_LOG_BUFFER_HEX(INFO_TAG, local_response_buffer, strlen(local_response_buffer));
 		
