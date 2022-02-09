@@ -29,8 +29,6 @@
 extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
 extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
 
-int cursor_x=0;;
-
 /*
 char imagenes_var[20][10] ={{"","","","","","","","","",""},
  {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},
@@ -131,14 +129,13 @@ void simple_get_example_task(void *pvParameter)
 			token = strtok(output_buffer, delimitador);
 			if(token != NULL){
 				linea_lcd = 2;
-				cursor_x = 3;
 				if(strncmp(token,TAG_ENTRADA,3) == 0){
-					escribir_algo("             ",13,1,2);
+					escribir_algo("             ",13,1,2,0);
 					while(token != NULL && strncmp(token,TAG_SALIDA,3) != 0){
 						// Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
 						token = strtok(NULL, delimitador);
 						ESP_LOGI(INFO_TAG,"Token: %s\n", token);
-						escribir_algo(token,strlen(token),linea_lcd,2);
+						escribir_algo(token,strlen(token),linea_lcd,2,2);
 						linea_lcd += 1; 
 					}
 				}
@@ -293,7 +290,7 @@ void app_main()
 	//Iniciar primer configuraciones
 	fillScreen(TFTBACKCOLOR);
 	ESP_LOGI(INFO_TAG,"SE PINTA EN NEGRO");
-	escribir_algo("Conectando...",13,1,2);
+	escribir_algo("Conectando...",13,1,2,0);
 	
 	//**********************
     //xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);

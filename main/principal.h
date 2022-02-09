@@ -59,7 +59,7 @@ void tft_init();
 void tft_init(void);
 void fillScreen(uint16_t color);
 void testdrawtext(char *text, uint16_t color);
-void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex);
+void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex,int cursor_x);
 //*****
 void enviar_valor_spi(const uint8_t cmd);
 

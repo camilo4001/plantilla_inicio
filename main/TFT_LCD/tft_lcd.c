@@ -38,10 +38,10 @@ extern const unsigned char Amin,Bmin,Cmin,Dmin,Emin,Rmin,Tmin,Imin,Zmin,Omin,Smi
 extern const unsigned char flecha_der,flecha_izq;
 extern const unsigned char	CFeliz,CPreo,CTriste,CEnojado;
 
-extern int cursor_x;
+//extern int cursor_x;
 
 
-void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex)
+void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex,int cursor_x)
 {
 	//printf("Letra (%s) obtenida!\n", text);
 
@@ -50,6 +50,8 @@ void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex)
 	int ancho = 8;
 	int alto = 8;
 	if (_text_len > 16) _text_len = 16;
+	
+	cursor_x =(ancho*2)*cursor_x;
 	
 	for (uint8_t i = 0; i < _text_len; i++) {
 	
