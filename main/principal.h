@@ -35,7 +35,7 @@
 #define   TFTWIDHT  240
 #define   TFTHIGH  240
 
-#define   TFTBACKCOLOR	 	0xF81F
+#define   TFTBACKCOLOR	 	0xFD00
 #define   TFTLETRACOLOR	 	0xFFFF
 #define   TFTSELECTORCOLOR	0xFCA0
 

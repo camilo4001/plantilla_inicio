@@ -282,6 +282,7 @@ void app_main()
 	//Iniciar primer configuraciones
 	fillScreen(TFTBACKCOLOR);
 	ESP_LOGI(INFO_TAG,"SE PINTA EN NEGRO");
+	escribir_algo("Conectando a servidor",21,1,2);
 	
 	//**********************
     //xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);
