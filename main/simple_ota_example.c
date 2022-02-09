@@ -118,6 +118,7 @@ void simple_get_example_task(void *pvParameter)
 		esp_http_client_handle_t client = esp_http_client_init(&config);
 
 		// GET
+		ESP_LOGI(INFO_TAG, "Efectua el GET:-----");
 		esp_err_t err = esp_http_client_perform(client);
 		if (err == ESP_OK) {
 			ESP_LOGI(INFO_TAG, "HTTP GET Status = %d, content_length = %d",
