@@ -128,16 +128,22 @@ void simple_get_example_task(void *pvParameter)
 			
 			token = strtok(output_buffer, delimitador);
 			if(token != NULL){
-				linea_lcd = 2;
+				linea_lcd = 1;
 				if(strncmp(token,TAG_ENTRADA,3) == 0){
 					escribir_algo("             ",13,1,2,0);
 					while(token != NULL && strncmp(token,TAG_SALIDA,3) != 0){
 						// Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
-						token = strtok(NULL, delimitador);
+						if(linea_lcd == 1){
+							linea_lcd += 1;
+							token = strtok(NULL, delimitador);
+							continue;
+						}
 						ESP_LOGI(INFO_TAG,"Token: %s\n", token);
-						printf("FALTA PARA CENTRALIZAR %d", (16-strlen(token))/2);
-						escribir_algo(token,strlen(token),linea_lcd,2,(16-strlen(token))/2);
+						printf("FALTA PARA CENTRALIZAR %d \n", (15-strlen(token))/2);
+						escribir_algo(token,strlen(token),linea_lcd,2,(15-strlen(token))/2);
 						linea_lcd += 1; 
+						token = strtok(NULL, delimitador);
+						
 					}
 				}
 
