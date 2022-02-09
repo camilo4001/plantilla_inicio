@@ -128,7 +128,7 @@ void simple_get_example_task(void *pvParameter)
 			
 			token = strtok(output_buffer, delimitador);
 			if(token != NULL){
-				linea_lcd = 2
+				linea_lcd = 2;
 				while(token != NULL){
 					// Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
 					ESP_LOGI(INFO_TAG,"Token: %s\n", token);
