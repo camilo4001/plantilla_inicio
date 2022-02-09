@@ -17,6 +17,10 @@
 #define RST_PIN      2//
 #define DC_PIN       15//
 
+// SERVIDOR DE VERSIONES HTTP
+#define TAG_ENTRADA  "ini"
+#define TAG_SALIDA   "ter"
+
 
 //******pantalla tft
 // Some ready-made 16-bit ('565') color settings:
@@ -35,7 +39,7 @@
 #define   TFTWIDHT  240
 #define   TFTHIGH  240
 
-#define   TFTBACKCOLOR	 	0xFD00
+#define   TFTBACKCOLOR	 	0x001F
 #define   TFTLETRACOLOR	 	0xFFFF
 #define   TFTSELECTORCOLOR	0xFCA0
 
