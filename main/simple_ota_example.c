@@ -130,7 +130,7 @@ void simple_get_example_task(void *pvParameter)
 			if(token != NULL){
 				linea_lcd = 1;
 				if(strncmp(token,TAG_ENTRADA,3) == 0){
-					escribir_algo("             ",13,1,2,0);
+					escribir_algo("             ",13,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
 					while(token != NULL && strncmp(token,TAG_SALIDA,3) != 0){
 						// Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
 						if(linea_lcd == 1){
@@ -140,7 +140,7 @@ void simple_get_example_task(void *pvParameter)
 						}
 						ESP_LOGI(INFO_TAG,"Token: %s\n", token);
 						printf("FALTA PARA CENTRALIZAR %d \n", (15-strlen(token))/2);
-						escribir_algo(token,strlen(token),linea_lcd,2,(15-strlen(token))/2);
+						escribir_algo(token,strlen(token),linea_lcd,2,(15-strlen(token))/2,TFTLETRACOLOR,TFTBACKCOLOR);
 						linea_lcd += 1; 
 						token = strtok(NULL, delimitador);
 						
@@ -297,7 +297,7 @@ void app_main()
 	//Iniciar primer configuraciones
 	fillScreen(TFTBACKCOLOR);
 	ESP_LOGI(INFO_TAG,"SE PINTA EN NEGRO");
-	escribir_algo("Conectando...",13,1,2,0);
+	escribir_algo("Conectando...",13,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
 	
 	//**********************
     //xTaskCreate(&simple_ota_example_task, "ota_example_task", 8192, NULL, 5, NULL);

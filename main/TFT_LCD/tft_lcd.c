@@ -41,7 +41,7 @@ extern const unsigned char	CFeliz,CPreo,CTriste,CEnojado;
 //extern int cursor_x;
 
 
-void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex,int cursor_x)
+void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex,int cursor_x,uint16_t color,uint16_t back_color)
 {
 	//printf("Letra (%s) obtenida!\n", text);
 
@@ -56,7 +56,7 @@ void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex,int curs
 	for (uint8_t i = 0; i < _text_len; i++) {
 	
 		memcpy(image, font8x8_basic_tr[(uint8_t)text[i]], 8);
-		Enviar_msn_tft(&image,8,cursor_x,renglon*alto*tam_tex,ancho,TFTLETRACOLOR,TFTBACKCOLOR,tam_tex);
+		Enviar_msn_tft(&image,8,cursor_x,renglon*alto*tam_tex,ancho,color,back_color,tam_tex);
 		//Enviar_msn_tft(const unsigned char *p_msn,int ndatos,int posx, int posy,int ancho,uint16_t color,uint16_t back_color)
 		cursor_x+=(ancho*2);
 		//printf("valor (%d) reading!\n", cursor_x);
