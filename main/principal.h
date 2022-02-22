@@ -22,6 +22,11 @@
 #define TAG_SALIDA   "ter"
 
 
+//********************* Botones
+#define CAMB_MENU    32
+#define SELECCION    27
+#define CAMB_PANT    5
+
 //******pantalla tft
 // Some ready-made 16-bit ('565') color settings:
 #define   ST7789_BLACK   0x0000
@@ -31,8 +36,8 @@
 #define   ST7789_CYAN    0x07FF
 #define   ST7789_MAGENTA 0xF81F
 #define   ST7789_YELLOW  0xFFE0
-//#define   ST7789_ORANGE  0xFCA0
-#define   ST7789_ORANGE  0xFD00
+#define   ST7789_ORANGE  0xFCA0
+//#define   ST7789_ORANGE  0xFD00
 #define   ST7789_WHITE   0xFFFF
 #define   ST7789_PURPLE  0x945F
 
@@ -59,7 +64,13 @@ void tft_init();
 void tft_init(void);
 void fillScreen(uint16_t color);
 void testdrawtext(char *text, uint16_t color);
-void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex,int cursor_x);
+void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex,int cursor_x,uint16_t color,uint16_t back_color);
 //*****
 void enviar_valor_spi(const uint8_t cmd);
+void camb_menu(int renglon_ant,int renglon_act);
+void borrar_menu(int renglon);
 
+//*********
+void obtener_versiones();
+void graficar_menu();
+void limpiar_var_menu();
