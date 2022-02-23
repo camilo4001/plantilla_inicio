@@ -493,6 +493,8 @@ void app_main()
 	//Iniciar primer configuraciones
 	fillScreen(TFTBACKCOLOR);
 	ESP_LOGI(INFO_TAG,"SE PINTA EN NEGRO");
+	
+	/*
 	escribir_algo("Conectando...",13,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
 	
 	escribir_algo("Menu1",5,1,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
@@ -502,6 +504,9 @@ void app_main()
 	escribir_algo("Menu5",5,9,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
 	escribir_algo("Menu6",5,11,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
 	escribir_algo("Menu7",5,13,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
+	
+	*/
+	
 	//escribir_algo("MenuN",5,14,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
 
 	
@@ -512,18 +517,94 @@ void app_main()
 	//camb_menu(3,5);
 	
 	//create a queue to handle gpio event from isr
+	char *mensaje_str = NULL;
+	int ojo_tam = 4;
 	
-	/*
+	escribir_algo("\\",1,3,3,4,TFTLETRACOLOR,TFTBACKCOLOR);
+	escribir_algo("/",1,3,3,9,TFTLETRACOLOR,TFTBACKCOLOR);
+	escribir_algo("-",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+	escribir_algo("-",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+	escribir_algo("-----",ojo_tam,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
+	
+	vTaskDelay(1000 / portTICK_PERIOD_MS);
 	while(1){
 		//probar animaciones
 		
-		escribir_algo("-",1,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-		for(int x=0;x<=13;x++){
-			//escribir_algo(" ",1,1,2,x,TFTLETRACOLOR,TFTBACKCOLOR);
-			//escribir_algo("-",2,1,2,x+1,TFTLETRACOLOR,TFTBACKCOLOR);
-			vTaskDelay(10 / portTICK_PERIOD_MS);
+		// PARPADEO
+		for(int x=0;x<=3;x++){
+
+			vTaskDelay(2000 / portTICK_PERIOD_MS);
+			
+			escribir_algo("-",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+			escribir_algo("-",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+			escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
+			
+			vTaskDelay(300 / portTICK_PERIOD_MS);
+			
+			escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+			escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+			escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
 		}
+		//GUIÑO IZQUIERDO
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("-",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
 		
+		vTaskDelay(500 / portTICK_PERIOD_MS);
+		
+		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);	
+		
+		//GUIÑO DERECHO
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("-",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
+		
+		vTaskDelay(500 / portTICK_PERIOD_MS);
+		
+		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);	
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+		//Sorpersa
+		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);	
+		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo(" () ",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
+		vTaskDelay(2000 / portTICK_PERIOD_MS);
+		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
+		
+		vTaskDelay(1000 / portTICK_PERIOD_MS);
+		escribir_algo("o",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("-----",ojo_tam,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
+		vTaskDelay(2000 / portTICK_PERIOD_MS);
+		
+		escribir_algo("^",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("^",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
+		escribir_algo("-----",ojo_tam,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
+		vTaskDelay(2000 / portTICK_PERIOD_MS);
+
+		/*
+		escribir_algo("-",1,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
+		for(int x=10;x<=99;x++){
+			asprintf(&mensaje_str, "%d",x);
+			escribir_algo(mensaje_str,2,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
+			//escribir_algo("-",2,1,2,x+1,TFTLETRACOLOR,TFTBACKCOLOR);
+			//vTaskDelay(5 / portTICK_PERIOD_MS);
+		}
+		*/
+		/*
 		escribir_algo("      ---      ",15,7,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
 		vTaskDelay(2 / portTICK_PERIOD_MS);
 		escribir_algo("     -----     ",15,7,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
@@ -533,9 +614,9 @@ void app_main()
 		escribir_algo("     -----     ",15,7,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
 		vTaskDelay(2 / portTICK_PERIOD_MS);
 		escribir_algo("      ---      ",15,7,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-
+		*/
 	}
-	*/
+	
 	gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
 	
 	//**********************
