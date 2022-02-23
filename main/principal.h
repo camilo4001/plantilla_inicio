@@ -74,3 +74,4 @@ void borrar_menu(int renglon);
 void obtener_versiones();
 void graficar_menu();
 void limpiar_var_menu();
+void simple_ota_example_task();

@@ -94,7 +94,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
         ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", evt->header_key, evt->header_value);
         break;
     case HTTP_EVENT_ON_DATA:
-        ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);		
+        //ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);		
 		if (output_buffer == NULL) {
 			output_buffer = (char *) malloc(evt->data_len);
 			//output_len = evt->data_len;
@@ -108,7 +108,7 @@ esp_err_t _http_event_handler(esp_http_client_event_t *evt)
 		
 		//asprintf(&output_buffer, "%s",evt->data);
 		
-		ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, DATOS=%s", output_buffer);
+		//ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, DATOS=%s", output_buffer);
     
         break;
     case HTTP_EVENT_ON_FINISH:
@@ -129,8 +129,6 @@ void tarea_ciclo(void *pvParameter)
 {
 	
 	uint32_t io_num;
-	char *mensaje_str = NULL;
-	char cadena[13];
 
 	obtener_versiones();
 	
@@ -188,14 +186,12 @@ void tarea_ciclo(void *pvParameter)
 					
 				case SELECCION:
 				
-					strncpy(cadena,menu_titulos[menu_pos-1],13);
-				
-					ESP_LOGI(INFO_TAG, "Entra a seleccion");
-					ESP_LOGI(INFO_TAG, "MENU ---%s",cadena);
+					if(menu_pos!=0){
+						
 					
-					asprintf(&mensaje_str, "https://innovacionesco.com:3389/%s\n",cadena);
-
-					ESP_LOGI(INFO_TAG,"IMAGEN APUNTAR %s",mensaje_str);
+						ESP_LOGI(INFO_TAG, "Entra a seleccion");
+						simple_ota_example_task();
+					}
 					//obtener_versiones();
 					break;
 			}
@@ -248,7 +244,6 @@ void obtener_versiones(){
 
 	
 	ESP_LOGI(INFO_TAG, "Starting GET example");
-	
 	asprintf(&mensaje_str, "https://innovacionesco.com:3389/imagenes/%d",pos_imagen);
 	
 	esp_http_client_config_t config = {
@@ -327,17 +322,35 @@ void obtener_versiones(){
 	
 }
 
-void simple_ota_example_task(void *pvParameter)
+void simple_ota_example_task()
 {
+	char *mensaje_str = NULL;
+	char cadena[14]={              };
+	char *token;
+	char delimitador[] = " ";
+	
+	strncpy(cadena,menu_titulos[menu_pos-1],13);
     ESP_LOGI(INFO_TAG, "Starting OTA example");
+    ESP_LOGI(INFO_TAG, "Imagen a buscar %s",cadena);
+    ESP_LOGI(INFO_TAG, "Encontrado en menu %s",menu_titulos[menu_pos-1]);
+	
+	//asprintf(&mensaje_str, "https://innovacionesco.com:3389/%c",menu_titulos[menu_pos-1][0]);
+	asprintf(&mensaje_str, "https://innovacionesco.com:3389/%s",cadena);
+	ESP_LOGI(INFO_TAG,"IMAGEN APUNTAR %s",mensaje_str);
+	
+	token = strtok(mensaje_str, delimitador);
+	ESP_LOGI(INFO_TAG,"TOKEN GENERADO %s",token);
+
 
     esp_http_client_config_t config = {
-        .url = "https://innovacionesco.com:3389/ssd1306",
+        .url = token,
+        //.url = "https://innovacionesco.com:3389/RobotGestos",
+        //.url = "https://innovacionesco.com:3389/R",
         .cert_pem = (char *)server_cert_pem_start,
         .event_handler = _http_event_handler,
     };
 	
-	ESP_LOGI(INFO_TAG, "Url obtenida :-----");
+	ESP_LOGI(INFO_TAG, "Inicia cargue de imagen :-----");
 	
 //#ifdef CONFIG_EXAMPLE_SKIP_COMMON_NAME_CHECK
     //config.skip_cert_common_name_check = true;
@@ -494,9 +507,9 @@ void app_main()
 	fillScreen(TFTBACKCOLOR);
 	ESP_LOGI(INFO_TAG,"SE PINTA EN NEGRO");
 	
-	/*
-	escribir_algo("Conectando...",13,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
 	
+	escribir_algo(" Conectando...",14,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
+	/*
 	escribir_algo("Menu1",5,1,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
 	escribir_algo("Menu2",5,3,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
 	escribir_algo("Menu3",5,5,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
@@ -516,6 +529,7 @@ void app_main()
 	//vTaskDelay(3000 / portTICK_PERIOD_MS);
 	//camb_menu(3,5);
 	
+	/*
 	//create a queue to handle gpio event from isr
 	char *mensaje_str = NULL;
 	int ojo_tam = 4;
@@ -595,28 +609,9 @@ void app_main()
 		escribir_algo("-----",ojo_tam,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
 		vTaskDelay(2000 / portTICK_PERIOD_MS);
 
-		/*
-		escribir_algo("-",1,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-		for(int x=10;x<=99;x++){
-			asprintf(&mensaje_str, "%d",x);
-			escribir_algo(mensaje_str,2,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-			//escribir_algo("-",2,1,2,x+1,TFTLETRACOLOR,TFTBACKCOLOR);
-			//vTaskDelay(5 / portTICK_PERIOD_MS);
-		}
-		*/
-		/*
-		escribir_algo("      ---      ",15,7,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-		vTaskDelay(2 / portTICK_PERIOD_MS);
-		escribir_algo("     -----     ",15,7,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-		vTaskDelay(2 / portTICK_PERIOD_MS);
-		escribir_algo("    -------    ",15,7,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-		vTaskDelay(2 / portTICK_PERIOD_MS);
-		escribir_algo("     -----     ",15,7,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-		vTaskDelay(2 / portTICK_PERIOD_MS);
-		escribir_algo("      ---      ",15,7,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-		*/
+		
 	}
-	
+	*/
 	gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
 	
 	//**********************
