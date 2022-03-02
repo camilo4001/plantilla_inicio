@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := simple_ota
+PROJECT_NAME := plantilla_base
 
 EXTRA_COMPONENT_DIRS = $(IDF_PATH)/examples/common_components/protocol_examples_common
 

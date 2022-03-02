@@ -29,6 +29,10 @@
 // VAR SPI
 spi_device_handle_t spi;
 
+// Wifi
+char *ip_str = NULL;
+
+
 #define OTA_URL_SIZE 256 
 //Interrupciones
 #define ESP_INTR_FLAG_DEFAULT 0

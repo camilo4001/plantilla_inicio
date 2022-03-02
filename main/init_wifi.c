@@ -71,5 +71,5 @@ void init_wifi()
   ESP_LOGI(TAG, "start the WIFI SSID:[%s]", CONFIG_ESP_WIFI_SSID);
   ESP_ERROR_CHECK(esp_wifi_start());
   ESP_LOGI(TAG, "Waiting for wifi");
-  xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT, false, true, portMAX_DELAY);
+  xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT, false, true, 10000 / portTICK_PERIOD_MS);
 }

@@ -64,12 +64,4 @@ void fillScreen(uint16_t color);
 void testdrawtext(char *text, uint16_t color);
 void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex,int cursor_x,uint16_t color,uint16_t back_color);
 //*****
-//void enviar_valor_spi(const uint8_t cmd);
-//void camb_menu(int renglon_ant,int renglon_act);
-//void borrar_menu(int renglon);
-
-//*********
-//void obtener_versiones();
-//void graficar_menu();
-//void limpiar_var_menu();
-//void simple_ota_example_task();
+void enviar_valor_spi(const uint8_t cmd);
