@@ -1,13 +1,7 @@
-# Simple OTA example
-
-This example is based on `esp_https_ota` component's APIs.
-
+# Plantilla Base
+Se encuentra las funciones base para activar la LCD ST7789 para generar tu propio codigo para el InnovaCubo
 ## Configuration
-
-Refer README.md in the parent directory for setup details
-
-Borrar OTA
-
-idf.py erase_otadata
+Todas las configuraciones de pines se encuentran en "principal.h" se debe respetar los pines establecidos para la LCD ST7789 y los 
+3 botones base para que correspondan a los usados en producto Innovacubo
 
 

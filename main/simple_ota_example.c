@@ -25,44 +25,15 @@
 #include "driver/spi_master.h"
 #include "principal.h"
 
-//static const char *TAG = "simple_ota_example";
-extern const uint8_t server_cert_pem_start[] asm("_binary_ca_cert_pem_start");
-extern const uint8_t server_cert_pem_end[] asm("_binary_ca_cert_pem_end");
-
-/*
-char imagenes_var[20][10] ={{"","","","","","","","","",""},
- {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},
- {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},
- {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},
- {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""},
- {"","","","","","","","","",""},{"","","","","","","","","",""},{"","","","","","","","","",""}
- };
-*/
 
 // VAR SPI
 spi_device_handle_t spi;
-
-// Wifi
-char *ip_str = NULL;
 
 #define OTA_URL_SIZE 256 
 //Interrupciones
 #define ESP_INTR_FLAG_DEFAULT 0
 static xQueueHandle gpio_evt_queue = NULL;
 int int_terminada = 1;
-
-// HTTP Var
-char *output_buffer = NULL;  // Buffer to store response of http request from event handler
-//int output_len=0;       // Stores number of bytes read
-
-uint8_t menu_pos=0;
-uint8_t max_menu=7;
-uint8_t cant_menu=0;
-
-
-char menu_titulos[8][13]={"             ","             ","             ","             ",
-						  "             ","             ","             ","             "};
-int pos_imagen = 0;
 
 
 //Interrupcion interruptores
@@ -78,59 +49,12 @@ void IRAM_ATTR gpio_isr_handler(void* arg) {
 }
 
 
-esp_err_t _http_event_handler(esp_http_client_event_t *evt)
-{
-    switch (evt->event_id) {
-    case HTTP_EVENT_ERROR:
-        ESP_LOGI(INFO_TAG, "HTTP_EVENT_ERROR");
-        break;
-    case HTTP_EVENT_ON_CONNECTED:
-        ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_CONNECTED");
-        break;
-    case HTTP_EVENT_HEADER_SENT:
-        ESP_LOGI(INFO_TAG, "HTTP_EVENT_HEADER_SENT");
-        break;
-    case HTTP_EVENT_ON_HEADER:
-        ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", evt->header_key, evt->header_value);
-        break;
-    case HTTP_EVENT_ON_DATA:
-        //ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, len=%d", evt->data_len);		
-		if (output_buffer == NULL) {
-			output_buffer = (char *) malloc(evt->data_len);
-			//output_len = evt->data_len;
-			if (output_buffer == NULL) {
-				ESP_LOGE(INFO_TAG, "buffer Null Failed to allocate memory for output buffer");
-				return ESP_FAIL;
-			}
-		}
-		
-		memcpy(output_buffer, evt->data, (evt->data_len)+1);
-		
-		//asprintf(&output_buffer, "%s",evt->data);
-		
-		//ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_DATA, DATOS=%s", output_buffer);
-    
-        break;
-    case HTTP_EVENT_ON_FINISH:
-        ESP_LOGI(INFO_TAG, "HTTP_EVENT_ON_FINISH");
-        break;
-    case HTTP_EVENT_DISCONNECTED:
-        ESP_LOGI(INFO_TAG, "HTTP_EVENT_DISCONNECTED");
-        break;
-	//case HTTP_EVENT_REDIRECT:
-	//	ESP_LOGI(INFO_TAG, "HTTP_EVENT_REDIRECT");
-    //    break;
-    }
-    return ESP_OK;
-}
-
-
 void tarea_ciclo(void *pvParameter)
 {
 	
 	uint32_t io_num;
 
-	obtener_versiones();
+	//obtener_versiones();
 	
 	while (1) {
 		
@@ -140,59 +64,14 @@ void tarea_ciclo(void *pvParameter)
 
     			case CAMB_MENU:
 					ESP_LOGI(INFO_TAG, "Entra a cambio de Menu");
-					
-					if(menu_pos == cant_menu){
-						menu_pos = 0;
-					}
-					else{
-						menu_pos += 1;
-					}
-					
-					ESP_LOGI(INFO_TAG, "Valor Menu %d",menu_pos);
-					
-					switch(menu_pos){
-						case 0:
-						borrar_menu((cant_menu*2)-1);
-						break;
-						case 1:
-						camb_menu(1,1);
-						break;
-						case 2:
-						camb_menu(1,3);
-						break;
-						case 3:
-						camb_menu(3,5);
-						break;
-						case 4:
-						camb_menu(5,7);
-						break;
-						case 5:
-						camb_menu(7,9);
-						break;
-						case 6:
-						camb_menu(9,11);
-						break;
-						case 7:
-						camb_menu(11,13);
-						break;
-
-					}
 					break;
 					
 				case CAMB_PANT:
 					ESP_LOGI(INFO_TAG, "Entra a cambio pantalla");
-					obtener_versiones();
 					break;
 					
 				case SELECCION:
-				
-					if(menu_pos!=0){
-						
-					
-						ESP_LOGI(INFO_TAG, "Entra a seleccion");
-						simple_ota_example_task();
-					}
-					//obtener_versiones();
+					ESP_LOGI(INFO_TAG, "Entra a seleccion");
 					break;
 			}
 			
@@ -205,172 +84,9 @@ void tarea_ciclo(void *pvParameter)
 	
 }
 
-void graficar_menu(){
-	
-	int linea_lcd = 1;
-	ESP_LOGI(INFO_TAG,"TAMAÑO MENU ==== %d",sizeof(menu_titulos[0]));
-	ESP_LOGI(INFO_TAG,"TAMAÑO MENU ==== %d",strlen(menu_titulos[0]));
-	ESP_LOGI(INFO_TAG,"PRIMER MENU==== %s",menu_titulos[0]);
-	
-	for(int i=0;i<max_menu;i++){
-	   //printf("FALTA PARA CENTRALIZAR %d \n", (15-strlen(menu_titulos[j]))/2);
-		escribir_algo(&menu_titulos[i],13,linea_lcd,2,1,TFTLETRACOLOR,TFTBACKCOLOR);
-		linea_lcd += 2;
-	}
-					
-}
 
 
-void limpiar_var_menu(){
-	
-	//char *mensaje_str = NULL;
-	
-	char val = ' ';
-	for(int i=0;i<max_menu;i++){	
-		for(int j=0;j<13;j++){
-			menu_titulos[i][j]=val;
-		}
-	}
-}
 
-void obtener_versiones(){
-	
-	char *token;
-	char delimitador[] = ",";
-	uint8_t linea_lcd = 0;
-	int i = 0;
-	char *mensaje_str = NULL;
-	int v_longitud=0;
-
-	
-	ESP_LOGI(INFO_TAG, "Starting GET example");
-	asprintf(&mensaje_str, "https://innovacionesco.com:3389/imagenes/%d",pos_imagen);
-	
-	esp_http_client_config_t config = {
-		.url = mensaje_str,
-		.cert_pem = (char *)server_cert_pem_start,
-		.event_handler = _http_event_handler,
-	};
-	
-	ESP_LOGI(INFO_TAG, "Url obtenida para get:-----");
-	printf("url: %s \n",mensaje_str);
-	esp_http_client_handle_t client = esp_http_client_init(&config);
-
-	// GET
-	ESP_LOGI(INFO_TAG, "Efectua el GET:-----");
-	esp_err_t err = esp_http_client_perform(client);
-	if (err == ESP_OK) {
-		ESP_LOGI(INFO_TAG, "HTTP GET Status = %d, content_length = %d",
-				esp_http_client_get_status_code(client),
-				esp_http_client_get_content_length(client));
-		
-		
-		token = strtok(output_buffer, delimitador);
-		if(token != NULL){
-			linea_lcd = 0;
-			limpiar_var_menu();
-			if(strncmp(token,TAG_ENTRADA,3) == 0){
-				escribir_algo("             ",13,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-				while(token != NULL && strncmp(token,TAG_SALIDA,3) != 0){
-					ESP_LOGI(INFO_TAG,"TOKEN ==== %d",*(token+1));
-					ESP_LOGI(INFO_TAG,"TAMAÑO TOKEN ==== %d",strlen(token));
-					// Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
-					if(linea_lcd == 0){
-						linea_lcd += 1;
-						token = strtok(NULL, delimitador);
-						ESP_LOGI(INFO_TAG,"LONGITUD Token: %s\n", token);
-						sscanf(token, "%d",&v_longitud);
-						ESP_LOGI(INFO_TAG,"VALOR LONGITUD ENTERO: %d\n", v_longitud);
-						token = strtok(NULL, delimitador);
-						continue;
-					}
-					ESP_LOGI(INFO_TAG,"Token: %s\n", token);
-					
-					for(int j=0;j<strlen(token);j++){
-						menu_titulos[i][j]=*(token+j);
-					}
-					ESP_LOGI(INFO_TAG,"MENU GUARDADO ==== %s",menu_titulos[i]);
-					//escribir_algo(token,strlen(token),linea_lcd,2,(15-strlen(token))/2,TFTLETRACOLOR,TFTBACKCOLOR);
-					token = strtok(NULL, delimitador);
-					i++; 
-					linea_lcd += 2;
-				}
-			}
-
-		}
-		
-		borrar_menu((menu_pos*2)-1);
-		menu_pos = 0;
-
-		cant_menu = i;		
-		if((v_longitud-i)>0){
-			pos_imagen += i;
-		}
-		else{
-			pos_imagen = 0;
-		}
-
-		ESP_LOGI(INFO_TAG,"POS_IMAGEN==== %d",pos_imagen);
-		graficar_menu();
-		output_buffer = NULL;
-		
-	} else {
-		ESP_LOGE(INFO_TAG, "HTTP GET request failed: %s", esp_err_to_name(err));
-		output_buffer = NULL;
-	}
-	//ESP_LOG_BUFFER_HEX(INFO_TAG, local_response_buffer, strlen(local_response_buffer));
-	
-}
-
-void simple_ota_example_task()
-{
-	char *mensaje_str = NULL;
-	char cadena[14]={              };
-	char *token;
-	char delimitador[] = " ";
-	
-	strncpy(cadena,menu_titulos[menu_pos-1],13);
-    ESP_LOGI(INFO_TAG, "Starting OTA example");
-    ESP_LOGI(INFO_TAG, "Imagen a buscar %s",cadena);
-    ESP_LOGI(INFO_TAG, "Encontrado en menu %s",menu_titulos[menu_pos-1]);
-	
-	//asprintf(&mensaje_str, "https://innovacionesco.com:3389/%c",menu_titulos[menu_pos-1][0]);
-	asprintf(&mensaje_str, "https://innovacionesco.com:3389/%s",cadena);
-	ESP_LOGI(INFO_TAG,"IMAGEN APUNTAR %s",mensaje_str);
-	
-	token = strtok(mensaje_str, delimitador);
-	ESP_LOGI(INFO_TAG,"TOKEN GENERADO %s",token);
-
-
-    esp_http_client_config_t config = {
-        .url = token,
-        //.url = "https://innovacionesco.com:3389/RobotGestos",
-        //.url = "https://innovacionesco.com:3389/R",
-        .cert_pem = (char *)server_cert_pem_start,
-        .event_handler = _http_event_handler,
-    };
-	
-	ESP_LOGI(INFO_TAG, "Inicia cargue de imagen :-----");
-	
-//#ifdef CONFIG_EXAMPLE_SKIP_COMMON_NAME_CHECK
-    //config.skip_cert_common_name_check = true;
-//#endif
-
-	//ESP_LOGI(TAG, "Confiuracion obtenida :-----");
-	//printf(config);
-
-    esp_err_t ret = esp_https_ota(&config);
-	printf(config.url);
-	
-    if (ret == ESP_OK) {
-        esp_restart();
-    } else {
-        ESP_LOGE(INFO_TAG, "Firmware upgrade failed");
-    }
-    while (1) {
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-}
 
 void enviar_valor_spi(const uint8_t cmd)
 {
@@ -426,21 +142,6 @@ void ini_puertos(){
     gpio_set_intr_type(SELECCION, GPIO_INTR_NEGEDGE);
 }
 
-void camb_menu(int renglon_ant,int renglon_act){
-	
-	
-	escribir_algo(" ",1,renglon_ant,2,0,ST7789_YELLOW,TFTBACKCOLOR);
-	escribir_algo(" ",1,renglon_ant,2,14,ST7789_YELLOW,TFTBACKCOLOR);
-	
-	escribir_algo("=",1,renglon_act,2,0,ST7789_ORANGE,TFTBACKCOLOR);
-	escribir_algo("=",1,renglon_act,2,14,ST7789_ORANGE,TFTBACKCOLOR);	
-}
-void borrar_menu(int renglon){
-	ESP_LOGI(INFO_TAG,"Borrar renglon %d",renglon);
-	escribir_algo(" ",1,renglon,2,0,ST7789_YELLOW,TFTBACKCOLOR);
-	escribir_algo(" ",1,renglon,2,14,ST7789_YELLOW,TFTBACKCOLOR);
-}
-
 
 void app_main()
 {
@@ -448,10 +149,6 @@ void app_main()
     // Initialize NVS.
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        // 1.OTA app partition table has a smaller NVS partition size than the non-OTA
-        // partition table. This size mismatch may cause NVS initialization to fail.
-        // 2.NVS partition contains data in new format and cannot be recognized by this version of code.
-        // If this happens, we erase NVS partition and initialize NVS again.
         ESP_ERROR_CHECK(nvs_flash_erase());
         err = nvs_flash_init();
     }
@@ -459,8 +156,6 @@ void app_main()
 
     tcpip_adapter_init();
     ESP_ERROR_CHECK(esp_event_loop_create_default());
-
-	//Codigo Nuevo**********
 	
 	//Inicia spi	//SPI3
     spi_bus_config_t spi_bus_cfg = {
@@ -498,120 +193,19 @@ void app_main()
 	
 	//Inicializa modulos
 	
-	init_wifi();
-	//http_server_ini();
-	//ble_inicio();
-	tft_init();
+	init_wifi();            // Inicia Wifi
+	//http_server_ini();    // Inicia servidor web local
+	//ble_inicio(); 		// Inicializar Bluetooth 
+	tft_init();				// Inicializa lcd ST7789 pines a usar en principal.h 
 	
 	//Iniciar primer configuraciones
-	fillScreen(TFTBACKCOLOR);
+	fillScreen(TFTBACKCOLOR);     // PINTA LCD DE COLOR DE FONDO
 	ESP_LOGI(INFO_TAG,"SE PINTA EN NEGRO");
 	
 	
-	escribir_algo(" Conectando...",14,1,2,0,TFTLETRACOLOR,TFTBACKCOLOR);
-	/*
-	escribir_algo("Menu1",5,1,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("Menu2",5,3,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("Menu3",5,5,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("Menu4",5,7,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("Menu5",5,9,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("Menu6",5,11,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("Menu7",5,13,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
+	escribir_algo("HOLA A TODOS",12,1,2,1,TFTLETRACOLOR,TFTBACKCOLOR); // Mensaje , largo_del_mensaje, linea LCD, Tamaño, Offset en X, ColorLetra, Color fondo
+	escribir_algo("...A PROGRAMAR",14,3,2,0,TFTLETRACOLOR,TFTBACKCOLOR); // Mensaje , largo_del_mensaje, linea LCD, Tamaño, Offset en X, ColorLetra, Color fondo
 	
-	*/
-	
-	//escribir_algo("MenuN",5,14,2,5,TFTLETRACOLOR,TFTBACKCOLOR);
-
-	
-	//escribir_algo("*",1,3,2,0,ST7789_YELLOW,TFTBACKCOLOR);
-	//escribir_algo("*",1,3,2,14,ST7789_YELLOW,TFTBACKCOLOR);
-	
-	//vTaskDelay(3000 / portTICK_PERIOD_MS);
-	//camb_menu(3,5);
-	
-	/*
-	//create a queue to handle gpio event from isr
-	char *mensaje_str = NULL;
-	int ojo_tam = 4;
-	
-	escribir_algo("\\",1,3,3,4,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("/",1,3,3,9,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("-",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("-",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-	escribir_algo("-----",ojo_tam,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
-	
-	vTaskDelay(1000 / portTICK_PERIOD_MS);
-	while(1){
-		//probar animaciones
-		
-		// PARPADEO
-		for(int x=0;x<=3;x++){
-
-			vTaskDelay(2000 / portTICK_PERIOD_MS);
-			
-			escribir_algo("-",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-			escribir_algo("-",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-			escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
-			
-			vTaskDelay(300 / portTICK_PERIOD_MS);
-			
-			escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-			escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-			escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
-		}
-		//GUIÑO IZQUIERDO
-		vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("-",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
-		
-		vTaskDelay(500 / portTICK_PERIOD_MS);
-		
-		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);	
-		
-		//GUIÑO DERECHO
-		vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("-",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
-		
-		vTaskDelay(500 / portTICK_PERIOD_MS);
-		
-		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);	
-		vTaskDelay(1000 / portTICK_PERIOD_MS);
-
-		//Sorpersa
-		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("-----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);	
-		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo(" () ",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
-		vTaskDelay(2000 / portTICK_PERIOD_MS);
-		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("O",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("----",4,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
-		
-		vTaskDelay(1000 / portTICK_PERIOD_MS);
-		escribir_algo("o",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("O",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("-----",ojo_tam,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
-		vTaskDelay(2000 / portTICK_PERIOD_MS);
-		
-		escribir_algo("^",1,3,ojo_tam,4,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("^",1,3,ojo_tam,9,TFTLETRACOLOR,TFTBACKCOLOR);
-		escribir_algo("-----",ojo_tam,7,3,5,TFTLETRACOLOR,TFTBACKCOLOR);
-		vTaskDelay(2000 / portTICK_PERIOD_MS);
-
-		
-	}
-	*/
 	gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
 	
 	//**********************

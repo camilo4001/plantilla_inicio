@@ -2,27 +2,25 @@
 #define INFO_TAG "INFO_PROCESS"
 #define SPI_TAG "SPIINFO"
 
-//**********************SPI 3 LCD PRINCIPAL
+//--------------------------------------------------------- USAR ESTOS PINES PARA ESTANDAR EN LCD ST7789
+//**********************SPI 3 LCD PRINCIPAL ST7789
 #define SPI_BUS  HSPI_HOST
 #define PIN_NUM_MISO 25
 #define PIN_NUM_MOSI 23
 #define PIN_NUM_CLK  18 //18
 
-//*********************WIFI
-#define CONFIG_ESP_WIFI_SSID  "Tomas_2G"
-#define CONFIG_ESP_WIFI_PASSWORD  "tomas4982"
-
-
-//********************* TFT
+//********************* TFT ST7789
 #define RST_PIN      2//
 #define DC_PIN       15//
+//---------------------------------------------------------
 
-// SERVIDOR DE VERSIONES HTTP
-#define TAG_ENTRADA  "ini"
-#define TAG_SALIDA   "ter"
+//*********************WIFI
+#define CONFIG_ESP_WIFI_SSID  "Tomas_Prueba"
+#define CONFIG_ESP_WIFI_PASSWORD  "contraPrueba"
 
 
-//********************* Botones
+
+//********************* Botones  // 3 BOTONES ESTANDAR
 #define CAMB_MENU    32
 #define SELECCION    27
 #define CAMB_PANT    5
@@ -66,12 +64,12 @@ void fillScreen(uint16_t color);
 void testdrawtext(char *text, uint16_t color);
 void escribir_algo(char * text,int text_len,int renglon,uint8_t tam_tex,int cursor_x,uint16_t color,uint16_t back_color);
 //*****
-void enviar_valor_spi(const uint8_t cmd);
-void camb_menu(int renglon_ant,int renglon_act);
-void borrar_menu(int renglon);
+//void enviar_valor_spi(const uint8_t cmd);
+//void camb_menu(int renglon_ant,int renglon_act);
+//void borrar_menu(int renglon);
 
 //*********
-void obtener_versiones();
-void graficar_menu();
-void limpiar_var_menu();
-void simple_ota_example_task();
+//void obtener_versiones();
+//void graficar_menu();
+//void limpiar_var_menu();
+//void simple_ota_example_task();
